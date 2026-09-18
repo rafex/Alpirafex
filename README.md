@@ -18,6 +18,35 @@ just asn
 o algún documento requerido, termina sin iniciar el modelo ni modificar
 archivos. Consulta [`docs/man_asn.md`](docs/man_asn.md) para la integración.
 
+## Construir Alpirafex
+
+El proceso de construcción reproducible está documentado en
+[`docs/BUILD.md`](docs/BUILD.md). Requiere Docker y Just en el host; los
+paquetes APK y las ISO se construyen dentro de Alpine Linux.
+
+```bash
+just bootstrap
+just build-packages
+just build-iso x86_64
+just build-iso aarch64
+```
+
+## Publicar el repositorio APK
+
+El workflow `repository-image.yaml` construye una imagen nginx con
+`dist/repository/` y la publica como
+`ghcr.io/rafex/alpirafex-repository`. Requiere configurar en GitHub Actions
+los Secrets `ALPIRAFEX_PACKAGER_PRIVKEY`, `ALPIRAFEX_PACKAGER_PUBKEY` y
+`ALPIRAFEX_GITOPS_TOKEN`. El último debe poder abrir PRs en
+`rafex/Alpirafex-gitops`.
+
+El workflow nunca incluye la clave privada en la imagen; solo publica la clave
+pública dentro de `dist/repository/keys/`.
+
+La primera edición usa Alpine `v3.24`, Xorg+i3 y no incluye una sesión
+Wayland. Consulta [`docs/RELEASE.md`](docs/RELEASE.md) antes de publicar una
+release.
+
 ## Licencia
 
 La licencia MIT de este repositorio se aplica a los scripts de

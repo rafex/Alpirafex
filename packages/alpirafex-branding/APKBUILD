@@ -1,0 +1,33 @@
+maintainer="Alpirafex maintainers <maintainers@alpirafex.invalid>"
+pkgname=alpirafex-branding
+pkgver=0.1.0
+pkgrel=0
+pkgdesc="Alpirafex logos, wallpaper and Xorg/i3 starter configuration"
+url="https://github.com/rafex/Alpirafex"
+arch="noarch"
+license="MIT"
+depends="alpirafex-base"
+options="!check net"
+
+_assets="$startdir/files/assets"
+
+package() {
+	install -Dm644 "$_assets/alpirafex-logo.png" \
+		"$pkgdir/usr/share/pixmaps/alpirafex/alpirafex-logo.png"
+	install -Dm644 "$_assets/alpirafex-icon.png" \
+		"$pkgdir/usr/share/pixmaps/alpirafex/alpirafex-icon.png"
+	install -Dm644 "$_assets/backgrounds/alpirafex-wallpaper-1920x1080.png" \
+		"$pkgdir/usr/share/backgrounds/alpirafex/alpirafex-wallpaper.png"
+
+	install -Dm644 "$startdir/files/etc/skel/.config/i3/config" \
+		"$pkgdir/etc/skel/.config/i3/config"
+	install -Dm644 "$startdir/files/etc/skel/.config/picom/picom.conf" \
+		"$pkgdir/etc/skel/.config/picom/picom.conf"
+	install -Dm755 "$startdir/files/etc/skel/.xinitrc" \
+		"$pkgdir/etc/skel/.xinitrc"
+
+	install -Dm644 /dev/null "$pkgdir/usr/share/doc/$pkgname/README"
+	cat > "$pkgdir/usr/share/doc/$pkgname/README" <<-EOF
+	Alpirafex branding and the default Xorg+i3 session configuration.
+	EOF
+}

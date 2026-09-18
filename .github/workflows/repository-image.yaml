@@ -1,0 +1,104 @@
+name: Build and publish Alpirafex APK repository
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: alpirafex-repository-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: extractions/setup-just@v2
+
+      - name: Prepare signing keys
+        env:
+          PACKAGER_PRIVATE_KEY: ${{ secrets.ALPIRAFEX_PACKAGER_PRIVKEY }}
+          PACKAGER_PUBLIC_KEY: ${{ secrets.ALPIRAFEX_PACKAGER_PUBKEY }}
+        run: |
+          test -n "$PACKAGER_PRIVATE_KEY"
+          test -n "$PACKAGER_PUBLIC_KEY"
+          install -d -m 700 .ci-secrets
+          printf '%s\n' "$PACKAGER_PRIVATE_KEY" > .ci-secrets/alpirafex.rsa
+          printf '%s\n' "$PACKAGER_PUBLIC_KEY" > .ci-secrets/alpirafex.rsa.pub
+          # The build runs as Alpine's abuild user inside the container.
+          # The runner is ephemeral and the directory is excluded from the image context.
+          chmod 644 .ci-secrets/alpirafex.rsa .ci-secrets/alpirafex.rsa.pub
+
+      - name: Build signed APK repository
+        env:
+          ALPIRAFEX_REPO_BASE_URL: https://repo-alpirafex.rafex.io/alpirafex/v3.24
+          PACKAGER_PRIVKEY: /src/.ci-secrets/alpirafex.rsa
+          PACKAGER_PUBKEY: /src/.ci-secrets/alpirafex.rsa.pub
+        run: |
+          just bootstrap
+          just build-packages
+          test -f dist/repository/x86_64/APKINDEX.tar.gz
+          test -f dist/repository/aarch64/APKINDEX.tar.gz
+          test -f dist/repository/keys/alpirafex.rsa.pub
+          ! find dist/repository -type f \( -name '*.rsa' -o -name '*.key' \) -print -quit | grep -q .
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Resolve image tag
+        id: tag
+        run: |
+          if [ "$GITHUB_REF_TYPE" = tag ]; then
+            image_tag="$GITHUB_REF_NAME"
+          else
+            image_tag="manual-${GITHUB_RUN_NUMBER}"
+          fi
+          echo "value=$image_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Build and publish repository image
+        id: image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: containers/alpirafex-repository/Containerfile
+          push: true
+          tags: ghcr.io/rafex/alpirafex-repository:${{ steps.tag.outputs.value }}
+          provenance: false
+          sbom: false
+
+      - name: Checkout GitOps repository
+        uses: actions/checkout@v4
+        with:
+          repository: rafex/Alpirafex-gitops
+          token: ${{ secrets.ALPIRAFEX_GITOPS_TOKEN }}
+          path: gitops
+
+      - name: Update repository image digest
+        env:
+          IMAGE_DIGEST: ${{ steps.image.outputs.digest }}
+        run: |
+          test -n "$IMAGE_DIGEST"
+          sed -i -E "s#digest: sha256:.*#digest: ${IMAGE_DIGEST}#" \
+            gitops/clusters/server2/repository/kustomization.yaml
+
+      - name: Open digest promotion PR
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.ALPIRAFEX_GITOPS_TOKEN }}
+          path: gitops
+          commit-message: "chore(repository): promote image digest"
+          title: "chore(repository): promote image digest"
+          body: "Automated promotion of the Alpirafex APK repository image."
+          branch: automation/alpirafex-repository-digest
+          delete-branch: true

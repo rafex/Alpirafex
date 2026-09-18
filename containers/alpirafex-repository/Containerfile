@@ -1,0 +1,6 @@
+FROM docker.io/library/nginx:1.27-alpine
+
+COPY containers/alpirafex-repository/nginx.conf /etc/nginx/conf.d/default.conf
+COPY dist/repository/ /usr/share/nginx/html/alpirafex/v3.24/
+
+EXPOSE 80

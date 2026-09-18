@@ -1,0 +1,26 @@
+maintainer="Alpirafex maintainers <maintainers@alpirafex.invalid>"
+pkgname=alpirafex-base
+pkgver=0.1.0
+pkgrel=0
+pkgdesc="Base metadata and configuration for the Alpirafex meta-distribution"
+url="https://github.com/rafex/Alpirafex"
+arch="noarch"
+license="MIT"
+depends="alpine-base ca-certificates tzdata"
+options="!check"
+
+package() {
+	install -Dm644 /dev/null "$pkgdir/etc/alpirafex/release"
+	cat > "$pkgdir/etc/alpirafex/release" <<-EOF
+	NAME=Alpirafex
+	VERSION=$pkgver
+	BASE=Alpine
+	EOF
+
+	install -Dm644 /dev/null "$pkgdir/usr/share/doc/$pkgname/README"
+	cat > "$pkgdir/usr/share/doc/$pkgname/README" <<-EOF
+	Alpirafex base metadata package.
+	This package contains Alpirafex-owned configuration only.
+	Alpine packages retain their upstream licenses.
+	EOF
+}

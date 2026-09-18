@@ -2,3 +2,9 @@
 .specnative/agent.toml
 .specnative/agent.toml.local
 .specnative/agent/sessions/
+
+# Alpine build outputs and temporary checkouts
+build/
+dist/
+.cache/
+.ci-secrets/

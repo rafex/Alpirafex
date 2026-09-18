@@ -1,0 +1,17 @@
+maintainer="Alpirafex maintainers <maintainers@alpirafex.invalid>"
+pkgname=alpirafex-suckless-tools
+pkgver=0.1.0
+pkgrel=0
+pkgdesc="Suckless tools selected for the Alpirafex desktop"
+url="https://github.com/rafex/Alpirafex"
+arch="noarch"
+license="MIT"
+depends="dmenu st"
+options="!check"
+
+package() {
+	install -Dm644 /dev/null "$pkgdir/usr/share/doc/$pkgname/README"
+	cat > "$pkgdir/usr/share/doc/$pkgname/README" <<-EOF
+	Alpirafex's suckless tool set is provided by the upstream dmenu and st packages.
+	EOF
+}

@@ -1,0 +1,28 @@
+maintainer="Alpirafex maintainers <maintainers@alpirafex.invalid>"
+pkgname=alpirafex-openssh
+pkgver=0.1.0
+pkgrel=0
+pkgdesc="Secure OpenSSH defaults for Alpirafex"
+url="https://github.com/rafex/Alpirafex"
+arch="noarch"
+license="MIT"
+depends="alpirafex-base openssh openssh-server"
+options="!check net"
+
+package() {
+	install -Dm644 /dev/null "$pkgdir/etc/ssh/sshd_config.d/20-alpirafex.conf"
+	cat > "$pkgdir/etc/ssh/sshd_config.d/20-alpirafex.conf" <<-EOF
+	# Alpirafex defaults: enable the service explicitly after installation.
+	PermitRootLogin prohibit-password
+	PasswordAuthentication no
+	KbdInteractiveAuthentication no
+	X11Forwarding no
+	UsePAM yes
+	EOF
+
+	install -Dm644 /dev/null "$pkgdir/usr/share/doc/$pkgname/README"
+	cat > "$pkgdir/usr/share/doc/$pkgname/README" <<-EOF
+	OpenSSH is installed with key-based authentication as the default.
+	Enable sshd with: rc-update add sshd default && rc-service sshd start
+	EOF
+}

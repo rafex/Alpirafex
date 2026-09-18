@@ -1,0 +1,44 @@
+maintainer="Alpirafex maintainers <maintainers@alpirafex.invalid>"
+pkgname=alpirafex-desktop
+pkgver=0.1.0
+pkgrel=0
+pkgdesc="Minimal Xorg and i3 desktop profile for Alpirafex"
+url="https://github.com/rafex/Alpirafex"
+arch="noarch"
+license="MIT"
+depends="
+	alpirafex-base
+	alpirafex-suckless-tools
+	i3wm
+	i3status
+	picom
+	rofi-x11-wayland
+	xorg-server
+	xinit
+	xterm
+	xrandr
+	xset
+	xrdb
+	xauth
+	font-dejavu
+	mesa-egl
+	mesa-gl
+	mesa-dri-gallium
+	xf86-input-libinput
+	dbus
+	dbus-openrc
+	elogind
+	elogind-openrc
+	networkmanager
+	networkmanager-openrc
+	alsa-utils
+	"
+options="!check net"
+
+package() {
+	install -Dm644 /dev/null "$pkgdir/usr/share/doc/$pkgname/README"
+	cat > "$pkgdir/usr/share/doc/$pkgname/README" <<-EOF
+	Alpirafex uses Xorg and i3 as its only desktop session.
+	No Wayland compositor or Wayland session is part of this profile.
+	EOF
+}
