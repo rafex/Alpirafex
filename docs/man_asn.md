@@ -32,6 +32,10 @@ make install
 `asn` busca el MCP local más cercano en `.specnative/specnative_mcp.py`,
 subiendo por los directorios padre. Si no lo encuentra, usa el MCP incluido
 en el paquete global. Un MCP local encontrado que falle no activa fallback.
+La copia remota se cachea durante 24 horas fuera del proyecto. Se puede
+desactivar o forzar con `SPECNATIVE_MCP_UPDATE=never` o
+`SPECNATIVE_MCP_UPDATE=force`; el directorio se puede cambiar con
+`SPECNATIVE_MCP_CACHE_DIR`.
 `just asn` sólo delega en el ejecutable instalado.
 
 Dentro de la sesión, `/template nombre` es la única forma de solicitar una

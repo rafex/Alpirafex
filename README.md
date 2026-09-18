@@ -22,7 +22,10 @@ La interfaz independiente es `asn` (Agent Spec Native). Se instala una vez
 desde el repositorio del agente con `make install` y puede ejecutarse desde
 cualquier proyecto. `just asn` es sólo un alias conveniente. `asn-mcp --repo .`
 expone el MCP para Codex, Claude u OpenCode; el agente busca primero un MCP
-local en `.specnative/specnative_mcp.py` y después usa el MCP incluido.
+local en `.specnative/specnative_mcp.py` y después usa el MCP incluido. Si no
+hay MCP local, ASN consulta el último release, intenta clonar el repositorio
+como respaldo y conserva una copia cacheada o la versión interna si no hay
+Internet.
 
 ## Construir Alpirafex
 
