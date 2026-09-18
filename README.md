@@ -18,6 +18,10 @@ just asn
 o algún documento requerido, termina sin iniciar el modelo ni modificar
 archivos. Consulta [`docs/man_asn.md`](docs/man_asn.md) para la integración.
 
+La interfaz independiente es `asn` (Agent Spec Native). Puede instalarse una
+vez desde el repositorio del agente con `uv tool install --editable ./pilot` y
+ejecutarse desde cualquier proyecto. `just asn` es sólo un alias conveniente.
+
 ## Construir Alpirafex
 
 El proceso de construcción reproducible está documentado en

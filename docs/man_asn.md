@@ -22,5 +22,16 @@ preflight antes de iniciar el modelo y termina sin escribir si falla.
 just asn
 ```
 
+El comando canónico no depende de Just:
+
+```bash
+uv tool install --editable /Users/rafex/repository/github/rafex/Agent-SpecNative-Development/pilot
+export SPECNATIVE_AGENT_ROOT=/Users/rafex/repository/github/rafex/Agent-SpecNative-Development
+asn --repo /ruta/al/proyecto
+```
+
+`just asn` sólo delega en el ejecutable instalado dentro de
+`SPECNATIVE_AGENT_ROOT`.
+
 Dentro de la sesión, `/template nombre` es la única forma de solicitar una
 plantilla y siempre requiere confirmación explícita.
