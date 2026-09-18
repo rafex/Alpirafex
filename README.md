@@ -8,7 +8,7 @@ mantienen en `Agent-SpecNative-Development`; no es necesario instalar el MCP
 dentro de Alpirafex ni crear `.specnative/agent.toml`.
 
 ```bash
-export SPECNATIVE_AGENT_ROOT=/Users/rafex/repository/github/rafex/Agent-SpecNative-Development
+make install    # desde Agent-SpecNative-Development
 export SPECNATIVE_AGENT_MODEL="nombre-del-modelo"
 export OPENAI_API_KEY="tu-api-key"
 just asn
@@ -18,9 +18,11 @@ just asn
 o algún documento requerido, termina sin iniciar el modelo ni modificar
 archivos. Consulta [`docs/man_asn.md`](docs/man_asn.md) para la integración.
 
-La interfaz independiente es `asn` (Agent Spec Native). Puede instalarse una
-vez desde el repositorio del agente con `uv tool install --editable ./pilot` y
-ejecutarse desde cualquier proyecto. `just asn` es sólo un alias conveniente.
+La interfaz independiente es `asn` (Agent Spec Native). Se instala una vez
+desde el repositorio del agente con `make install` y puede ejecutarse desde
+cualquier proyecto. `just asn` es sólo un alias conveniente. `asn-mcp --repo .`
+expone el MCP para Codex, Claude u OpenCode; el agente busca primero un MCP
+local en `.specnative/specnative_mcp.py` y después usa el MCP incluido.
 
 ## Construir Alpirafex
 
