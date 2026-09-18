@@ -1,0 +1,4 @@
+# Local SpecNative pilot configuration and session state
+.specnative/agent.toml
+.specnative/agent.toml.local
+.specnative/agent/sessions/
