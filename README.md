@@ -2,23 +2,21 @@
 
 ## Probar el piloto SpecNative
 
-Este repositorio usa temporalmente el piloto ubicado en
-`Agent-SpecNative-Development`. La configuración local del MCP está en
-`.specnative/agent.toml` y no se versiona.
+Este repositorio integra el adaptador versionado
+[`agent_spec_native.just`](agent_spec_native.just). El piloto y el MCP se
+mantienen en `Agent-SpecNative-Development`; no es necesario instalar el MCP
+dentro de Alpirafex ni crear `.specnative/agent.toml`.
 
 ```bash
+export SPECNATIVE_AGENT_ROOT=/Users/rafex/repository/github/rafex/Agent-SpecNative-Development
 export SPECNATIVE_AGENT_MODEL="nombre-del-modelo"
 export OPENAI_API_KEY="tu-api-key"
-just run
+just asn
 ```
 
-Para preguntas por bloques:
-
-```bash
-just batch
-```
-
-Puedes cambiar la ubicación del piloto con `SPECNATIVE_PILOT_ROOT`.
+`just asn` ejecuta primero el preflight. Si falta `AGENTS.md`, `spec-native/`
+o algún documento requerido, termina sin iniciar el modelo ni modificar
+archivos. Consulta [`docs/man_asn.md`](docs/man_asn.md) para la integración.
 
 ## Licencia
 
