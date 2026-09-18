@@ -38,7 +38,7 @@ jobs:
 
       - name: Build signed APK repository
         env:
-          ALPIRAFEX_REPO_BASE_URL: https://repo-alpirafex.rafex.io/alpirafex/v3.24
+          ALPIRAFEX_REPO_BASE_URL: https://alpirafex.rafex.io/alpirafex/v3.24
           PACKAGER_PRIVKEY: /src/.ci-secrets/alpirafex.rsa
           PACKAGER_PUBKEY: /src/.ci-secrets/alpirafex.rsa.pub
         run: |

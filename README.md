@@ -43,6 +43,10 @@ los Secrets `ALPIRAFEX_PACKAGER_PRIVKEY`, `ALPIRAFEX_PACKAGER_PUBKEY` y
 El workflow nunca incluye la clave privada en la imagen; solo publica la clave
 pública dentro de `dist/repository/keys/`.
 
+El repositorio APK se sirve en
+`https://alpirafex.rafex.io/alpirafex/v3.24/<arquitectura>/` mediante el
+repositorio GitOps `rafex/Alpirafex-gitops`.
+
 La primera edición usa Alpine `v3.24`, Xorg+i3 y no incluye una sesión
 Wayland. Consulta [`docs/RELEASE.md`](docs/RELEASE.md) antes de publicar una
 release.
